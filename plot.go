@@ -9,7 +9,6 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/theme"
-	"github.com/mitchellh/go-homedir"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg"
@@ -29,14 +28,12 @@ func ShowTreeGraph(myTree BinaryTree) {
 	myApp := app.New()
 	myWindow := myApp.NewWindow("BinaryTree")
 
-	homeDir, err := homedir.Dir()
+	// Get current working directory (project folder)
+	currentDir, err := os.Getwd()
 	if err != nil {
 		log.Panic(err)
 	}
-	path := homeDir + "/home/"
-
-	// Create directory if it doesn't exist
-	os.MkdirAll(path, 0755)
+	path := currentDir + "/"
 
 	nodePts := make(plotter.XYs, myTree.NumNodes)
 	for i := 0; i < len(data); i++ {
@@ -88,7 +85,7 @@ func ShowTreeGraph(myTree BinaryTree) {
 		}
 		p.Add(label)
 	}
-	// Save the plot
+	// Save the plot to current directory (project folder)
 	err = p.Save(1000, 600, path+"tree.png")
 	if err != nil {
 		log.Panic(err)
